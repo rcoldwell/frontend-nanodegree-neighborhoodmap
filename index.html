@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Rob's Neighborhood</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-multiselect.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!--page content-->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="navbar-header">
+            <a class="navbar-brand brand-custom">Rob's Neighborhood</a>
+        </div>
+
+        <form role="form" data-bind="submit: search">
+            <div class="input-group input-custom">
+                <input type="text" class="form-control" placeholder="Search for..." data-bind="value: searchTerm">
+                <span class="input-group-btn">
+                <button class="btn btn-default" type="button" data-bind="click: search">Go!</button>
+            </span>
+            </div>
+        </form>
+    </nav>
+
+    <!--google map-->
+    <div id="map-canvas"></div>
+
+    <div class="footer">
+        <div class="dropup dropup-custom">
+            <select id="categories-select" multiple="multiple" data-bind="
+            options: categories(),          
+            optionsText: 'name',           
+            optionsValue: 'type',
+            selectedOptions: searchCategories"></select>
+        </div>
+    </div>
+
+    <script src="js/knockout-3.3.0.js"></script>
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-multiselect.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+    <script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerwithlabel/src/markerwithlabel.js"></script>
+    <script src="js/places.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
