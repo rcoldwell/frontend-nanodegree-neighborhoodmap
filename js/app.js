@@ -5,6 +5,14 @@ var SQsecret = "V3OJZGHJ3P3FPZI1RMIPJUZPTZU413WEGOYLKIIG2E4ZKRKT";
 var mapViewModel = {
     mapLat: ko.observable("32.9889692"),
     mapLng: ko.observable("-96.5990308"),
+    googleResults: ko.observableArray([]),
+    addGoogleResult: function (value) {
+        this.googleResults.push(value);
+    },
+    foursquareResults: ko.observableArray([]),
+    addFoursquareResult: function (value) {
+        this.foursquareResults.push(value);
+    },
     markers: ko.observableArray([]),
     addMarker: function (value) {
         this.markers.push(value);
@@ -15,11 +23,11 @@ var mapViewModel = {
     searchTerm: ko.observable(""),
     doSearch: function () {
         mapSearch(this.mapLat(), this.mapLng(), this.searchTerm(), this.searchCategories());
-        SQsearch(this.mapLat(), this.mapLng(), this.searchTerm(), this.SQsearchCategories());
+        SQsearch(this.mapLat(), this.mapLng(), this.searchTerm(), this.foursquareSearchCategories());
     },
     categories: ko.observableArray(places),
     searchCategories: ko.observableArray([]),
-    SQcategories: ko.observableArray([
+    foursquareCategories: ko.observableArray([
         {
             name: "Food",
             type: "food"
@@ -57,7 +65,7 @@ var mapViewModel = {
             type: "specials"
         }
 ]),
-    SQsearchCategories: ko.observableArray([]),
+    foursquareSearchCategories: ko.observableArray([]),
 };
 
 function buildMap() {
@@ -123,6 +131,13 @@ function createMarker(place) {
     });
 
     mapViewModel.addMarker(marker);
+
+    //listview
+    var result = {
+        name: place.name,
+        loc: place.vicinity
+    };
+    mapViewModel.addGoogleResult(result);
 }
 
 function createSQMarker(place) {
@@ -144,6 +159,14 @@ function createSQMarker(place) {
     });
 
     mapViewModel.addMarker(marker);
+
+    //listview
+    var result = {
+        name: place.venue.name,
+        loc: address
+    };
+    mapViewModel.addFoursquareResult(result);
+
 }
 
 function SQsearch(lat, lng, term, categories) {
@@ -156,8 +179,6 @@ function SQsearch(lat, lng, term, categories) {
             "&radius=5000" +
             "&ll=" + lat + "," + lng +
             "&query=" + term;
-
-        console.log(url);
 
         $.ajax({
             url: url,
@@ -186,7 +207,7 @@ function buildCategoryList() {
     });
 }
 
-function buildSQCategoryList() {
+function buildfoursquareCategoryList() {
     $('#categories-SQ').multiselect({
         buttonClass: 'btn btn-link',
         buttonText: function (options, select) {
@@ -203,8 +224,8 @@ function buildSQCategoryList() {
 $(document).ready(function () {
     ko.applyBindings(mapViewModel);
     buildCategoryList();
-    buildSQCategoryList();
+    buildfoursquareCategoryList();
     buildMap();
 
-  
+
 });

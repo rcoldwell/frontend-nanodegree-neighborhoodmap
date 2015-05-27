@@ -5,97 +5,55 @@
     <meta charset="UTF-8">
     <title>Rob's Neighborhood</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-multiselect.css">
-    <link rel="stylesheet" href="css/BootSideMenu.css">
-    <style>
-        #map-canvas {
-            width: 100%;
-            height: calc(100% - 0);
-            position: absolute;
-            right: 0;
-            top: 81px;
-            bottom: 50px;
-        }
-        
-        @media (min-width: 768px) {
-            #map-canvas {
-                width: 100%;
-                height: calc(100% - 0);
-                position: absolute;
-                right: 0;
-                top: 51px;
-                bottom: 50px;
-            }
-        }
-        
-        .input-custom {
-            padding: 8px 15px 8px 8px;
-        }
-        
-        .brand-custom {
-            padding: 15px 10px 10px 15px;
-            height: 30px;
-        }
-        
-        .footer {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 50px;
-            background-color: #838383;
-        }
-        
-        .footerlogo {
-            top: 5px;
-        }
-        
-        .btn-group {
-            padding-top: 8px;
-        }
-        
-        .btn-link {
-            color: white;
-        }
-        
-        .labels {
-            color: green;
-            background-color: white;
-            font-family: "Lucida Grande", "Arial", sans-serif;
-            font-size: 13px;
-            font-weight: bold;
-            text-align: center;
-            width: 20px;
-            height: 20px;
-            border: 1px solid gray;
-            white-space: nowrap;
-        }
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
+
 </head>
 
 <body>
-
-    <!--page content-->
-    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="navbar navbar-custom navbar-fixed-top">
+        <!--title-->
         <div class="navbar-header">
-            <a class="navbar-brand brand-custom">Rob's Neighborhood</a>
+            <a class="navbar-brand">Rob's Neighborhood</a>
+            <!--toggle box-->
+            <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
         </div>
 
-        <form role="form" data-bind="submit: doSearch">
-            <div class="input-group input-custom">
-                <input type="text" class="form-control" placeholder="Search for..." data-bind="value: searchTerm">
-                <span class="input-group-btn">
-                <button class="btn btn-default" type="button" data-bind="click: doSearch">Go!</button>
-            </span>
-            </div>
-        </form>
+        <!--search field-->
+        <div class="navbar-collapse collapse">
+            <form role="form-group" data-bind="submit: doSearch" style="display:inline;">
+                <div class="input-group input-custom">
+                    <input type="text" class="form-control" placeholder="Search for..." data-bind="value: searchTerm">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span> </span>
+                    <!--<button class="btn btn-default" type="button" data-bind="click: doSearch">Go!</button>-->
+                    </span>
+                </div>
+            </form>
+        </div>
 
-    </nav>
+    </div>
 
     <!--google map-->
     <div id="map-canvas"></div>
 
+    <!--list results-->
+    <div id="map-list">
+        <div class="panel list-group">
+            <a href="#" class="list-group-item" data-toggle="collapse" data-target="#sm" data-parent="#menu">GOOGLE<span class="icon-google pull-right"></span></a></a>
+            <div id="sm" class="sublinks collapse" data-bind="foreach: { data: googleResults, as: 'result' }">
+                <a class="list-group-item small"><span class="glyphicon glyphicon-map-marker google-mini-icon" ></span><span data-bind="text: result.name"></span></a>
+            </div>
+            <a href="#" class="list-group-item" data-toggle="collapse" data-target="#sl" data-parent="#menu">FOURSQUARE<span class="icon-foursquare pull-right"></a>
+            <div id="sl" class="sublinks collapse" data-bind="foreach: { data: foursquareResults, as: 'result' }">
+                <a class="list-group-item small"><span class="glyphicon glyphicon-map-marker foursquare-mini-icon" ></span><span data-bind="text: result.name"></span></a>
+            </div>
+        </div>
+    </div>
 
     <div class="footer">
         <div class="dropup dropup-custom">
@@ -105,18 +63,10 @@
             optionsValue: 'type',
             selectedOptions: searchCategories"></select>
             <select id="categories-SQ" data-bind="
-            options: SQcategories(),          
+            options: foursquareCategories(),          
             optionsText: 'name',           
             optionsValue: 'type',
-            selectedOptions: SQsearchCategories"></select>
-        </div>
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+            selectedOptions: foursquareSearchCategories"></select>
         </div>
     </div>
 
@@ -124,7 +74,6 @@
     <script src="js/jquery-2.1.3.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/bootstrap-multiselect.js"></script>
-    <script src="js/BootSideMenu.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
     <script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerwithlabel/src/markerwithlabel.js"></script>
     <script src="js/places.js"></script>
