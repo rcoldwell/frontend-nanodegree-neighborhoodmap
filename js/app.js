@@ -1,18 +1,63 @@
 var map, infowindow, service;
-var markers = [];
 var SQid = "Y55TSVC1TXZIPPF235A52J5FW5TOE4UWCYQBV0AGLLJ13AIQ";
 var SQsecret = "V3OJZGHJ3P3FPZI1RMIPJUZPTZU413WEGOYLKIIG2E4ZKRKT";
 
 var mapViewModel = {
     mapLat: ko.observable("32.9889692"),
     mapLng: ko.observable("-96.5990308"),
-    searchTerm: ko.observable(""),
-    searchCategories: ko.observableArray([]),
-    search: function () {
-        mapSearch(this.mapLat(), this.mapLng(), this.searchTerm(), this.searchCategories());
-        SQsearch(this.mapLat(), this.mapLng(), this.searchTerm(), this.searchCategories());
+    markers: ko.observableArray([]),
+    addMarker: function (value) {
+        this.markers.push(value);
     },
-    categories: ko.observableArray(places)
+    clearMarkers: function () {
+        this.markers = [];
+    },
+    searchTerm: ko.observable(""),
+    doSearch: function () {
+        mapSearch(this.mapLat(), this.mapLng(), this.searchTerm(), this.searchCategories());
+        SQsearch(this.mapLat(), this.mapLng(), this.searchTerm(), this.SQsearchCategories());
+    },
+    categories: ko.observableArray(places),
+    searchCategories: ko.observableArray([]),
+    SQcategories: ko.observableArray([
+        {
+            name: "Food",
+            type: "food"
+        },
+        {
+            name: "Drinks",
+            type: "drinks"
+        },
+        {
+            name: "Coffee",
+            type: "coffee"
+        },
+        {
+            name: "Shops",
+            type: "shops"
+        },
+        {
+            name: "Arts",
+            type: "arts"
+        },
+        {
+            name: "Outdoors",
+            type: "outdoors"
+        },
+        {
+            name: "Sights",
+            type: "sights"
+        },
+        {
+            name: "Trending",
+            type: "trending"
+        },
+        {
+            name: "Specials",
+            type: "specials"
+        }
+]),
+    SQsearchCategories: ko.observableArray([]),
 };
 
 function buildMap() {
@@ -58,111 +103,98 @@ function updateSQMarkers(results) {
 }
 
 function deleteMarkers() {
-    for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(null);
+    for (var i = 0; i < mapViewModel.markers.length; i++) {
+        mapViewModel.markers[i].setMap(null);
     }
-    markers = [];
+    mapViewModel.clearMarkers();
 };
 
 function createMarker(place) {
-    var icon = {
-        url: place.icon,
-        scaledSize: new google.maps.Size(20, 20),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(0, 0)
-    };
-
-    /*  var marker = new google.maps.Marker({
-        map: map,
-        position: place.geometry.location,
-        icon: icon
-    });
-*/
     var marker = new MarkerWithLabel({
         map: map,
-        position: place.geometry.location,
-        icon: ' ',
-        labelContent: '<i class="fa fa-google"></i>',
-        labelClass: "labels"
+        position: place.geometry.location
     });
 
-    var content = '<div><strong>' + place.name + '</strong><br>' + place.vicinity;
+    var content = '<strong>' + place.name + '</strong><br>' + place.vicinity;
 
     google.maps.event.addListener(marker, 'click', function () {
         infowindow.setContent(content);
         infowindow.open(map, this);
     });
 
-    markers.push(marker);
+    mapViewModel.addMarker(marker);
 }
 
 function createSQMarker(place) {
-    /*
-    var icon = {
-        url: place.venue.categories[0].icon.prefix + "bg_64" + place.venue.categories[0].icon.suffix,
-        scaledSize: new google.maps.Size(30, 30),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(0, 0)
-    };
-*/
-
     var marker = new MarkerWithLabel({
         map: map,
         position: new google.maps.LatLng(place.venue.location.lat, place.venue.location.lng),
-        icon: ' ',
-        labelContent: '<i class="fa fa-foursquare"></i>',
-        labelClass: "labels"
+        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
     });
 
-    var content = '<div><strong>' + place.venue.name + '</strong><br>' + place.venue.location.address;
+    var address = place.venue.location.formattedAddress[0] + "<br>" + place.venue.location.formattedAddress[1];
+    var website = (place.venue.url != null) ? "<br><br><a href='" + place.venue.url + "' target='_blank'>" + place.venue.url + "</a>" : "";
+    var phone = (place.venue.contact.formattedPhone != null) ? "<br>" + place.venue.contact.formattedPhone : "";
+    var menu = (place.venue.hasMenu) ? "<br><a href='" + place.venue.menu.url + "' target='_blank'>" + place.venue.menu.label + "</a>" : "";
+    var content = "<strong>" + place.venue.name + "</strong><br>" + address + website + phone + menu;
 
     google.maps.event.addListener(marker, 'click', function () {
         infowindow.setContent(content);
         infowindow.open(map, this);
     });
 
-    markers.push(marker);
+    mapViewModel.addMarker(marker);
 }
 
 function SQsearch(lat, lng, term, categories) {
-    var url = "https://api.foursquare.com/v2/venues/explore" +
-        "?client_id=" + SQid +
-        "&client_secret=" + SQsecret +
-        "&v=20150504" +
-        "&radius=5000" +
-        "&ll=" + lat + "," + lng +
-        "&query=" + term;
+    if (term) {
+        var url = "https://api.foursquare.com/v2/venues/explore" +
+            "?client_id=" + SQid +
+            "&client_secret=" + SQsecret +
+            "&v=20150504" +
+            "&section=" + categories +
+            "&radius=5000" +
+            "&ll=" + lat + "," + lng +
+            "&query=" + term;
 
-    $.ajax({
-        url: url,
-        success: function (result) {
-            updateSQMarkers(result);
-        },
-        error: function () {
-            alert("Foursquare failed.");
-        }
-    });
+        console.log(url);
+
+        $.ajax({
+            url: url,
+            success: function (result) {
+                updateSQMarkers(result);
+            },
+            error: function () {
+                alert("Foursquare failed.");
+            }
+        });
+    }
 }
 
 function buildCategoryList() {
-    $('#categories-select').multiselect({
+    $('#categories-google').multiselect({
         includeSelectAllOption: true,
         buttonClass: 'btn btn-link',
+        buttonText: function (options, select) {
+            return 'Google categories...';
+        },
         maxHeight: Math.floor($('#map-canvas').height() / 2),
         onChange: function (option, checked, select) {
-            mapViewModel.search();
+            mapViewModel.doSearch();
         },
         nonSelectedText: "Google categories..."
     });
 }
 
 function buildSQCategoryList() {
-    $('#SQcategories-select').multiselect({
-        includeSelectAllOption: true,
+    $('#categories-SQ').multiselect({
         buttonClass: 'btn btn-link',
+        buttonText: function (options, select) {
+            return 'Foursquare categories...';
+        },
         maxHeight: Math.floor($('#map-canvas').height() / 2),
         onChange: function (option, checked, select) {
-            mapViewModel.search();
+            mapViewModel.doSearch();
         },
         nonSelectedText: "Foursquare categories..."
     });
@@ -171,5 +203,8 @@ function buildSQCategoryList() {
 $(document).ready(function () {
     ko.applyBindings(mapViewModel);
     buildCategoryList();
+    buildSQCategoryList();
     buildMap();
+
+  
 });

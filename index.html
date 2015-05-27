@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-multiselect.css">
+    <link rel="stylesheet" href="css/BootSideMenu.css">
     <style>
         #map-canvas {
             width: 100%;
@@ -43,7 +44,7 @@
             bottom: 0;
             width: 100%;
             height: 50px;
-            background-color: #f5f5f5;
+            background-color: #838383;
         }
         
         .footerlogo {
@@ -52,6 +53,10 @@
         
         .btn-group {
             padding-top: 8px;
+        }
+        
+        .btn-link {
+            color: white;
         }
         
         .labels {
@@ -77,26 +82,41 @@
             <a class="navbar-brand brand-custom">Rob's Neighborhood</a>
         </div>
 
-        <form role="form" data-bind="submit: search">
+        <form role="form" data-bind="submit: doSearch">
             <div class="input-group input-custom">
                 <input type="text" class="form-control" placeholder="Search for..." data-bind="value: searchTerm">
                 <span class="input-group-btn">
-                <button class="btn btn-default" type="button" data-bind="click: search">Go!</button>
+                <button class="btn btn-default" type="button" data-bind="click: doSearch">Go!</button>
             </span>
             </div>
         </form>
+
     </nav>
 
     <!--google map-->
     <div id="map-canvas"></div>
 
+
     <div class="footer">
         <div class="dropup dropup-custom">
-            <select id="categories-select" multiple="multiple" data-bind="
+            <select id="categories-google" multiple="multiple" data-bind="
             options: categories(),          
             optionsText: 'name',           
             optionsValue: 'type',
             selectedOptions: searchCategories"></select>
+            <select id="categories-SQ" data-bind="
+            options: SQcategories(),          
+            optionsText: 'name',           
+            optionsValue: 'type',
+            selectedOptions: SQsearchCategories"></select>
+        </div>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
         </div>
     </div>
 
@@ -104,6 +124,7 @@
     <script src="js/jquery-2.1.3.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/bootstrap-multiselect.js"></script>
+    <script src="js/BootSideMenu.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
     <script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerwithlabel/src/markerwithlabel.js"></script>
     <script src="js/places.js"></script>

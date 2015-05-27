@@ -1,4 +1,11 @@
-http://fortawesome.github.io/Font-Awesome/
+APIs
 https://developers.google.com/maps/documentation/javascript/
-http://www.bootstrapzero.com/bootstrap-template/google-maps
 https://foursquare.com/developers
+
+Layout
+http://fortawesome.github.io/Font-Awesome/
+http://www.bootstrapzero.com/bootstrap-template/google-maps
+
+JS plugins
+http://davidstutz.github.io/bootstrap-multiselect/
+http://www.jqueryscript.net/menu/Sliding-Side-Menu-Panel-with-jQuery-Bootstrap-BootSideMenu.html
