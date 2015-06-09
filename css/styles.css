@@ -4,72 +4,63 @@ body {
 }
 
 body {
-    padding-top: 50px;
-    /*padding for navbar*/
+    padding-top: 80px;
 }
+/*header*/
 
-.navbar-custom .icon-bar {
-    background-color: #fff;
-}
-
-.navbar-custom {
-    background-color: #30769d;
-    color: #fff;
-}
-
-.navbar-custom li>a:hover,
-.navbar-custom li>a:focus {
-    background-color: #49bfff;
-}
-
-.navbar-custom a {
-    color: #fefefe;
+.navbar-toggle {
+    float: left;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 0px;
 }
 
 .navbar-custom .form-control:focus {
-    border-color: #49bfff;
+    border-color: #fefefe;
     outline: 0;
     -webkit-box-shadow: inset 0 0 0;
     box-shadow: inset 0 0 0;
 }
 
-#map-list {
-    height: 50%;
-    overflow-y: scroll;
-    width: 300px;
+.input-custom {
+    padding: 10px 10px 0px 10px;
 }
+
+.btn-link {
+    color: #ebebeb;
+}
+
+.btn-link:focus,
+.btn-link:hover {
+    color: #ebebeb;
+}
+
+@media (min-width: 1200px) {
+    .hidden-lg {
+        display: block!important;
+    }
+}
+
+@media (max-width: 1199px) and (min-width: 992px) {
+    .hidden-md {
+        display: block!important;
+    }
+}
+
+@media (max-width: 991px) {
+    .navbar-toggle {
+        display: block;
+    }
+}
+/*map*/
 
 #map-canvas {
     width: 100%;
     height: calc(100% - 0);
     position: absolute;
     right: 0;
-    top: 50px;
+    top: 78px;
     bottom: 0;
-}
-
-.input-custom {
-    padding: 8px 15px 8px 8px;
-}
-
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 50px;
-    background-color: #30769d;
-}
-
-.footerlogo {
-    top: 5px;
-}
-
-.btn-group {
-    padding-top: 8px;
-}
-
-.btn-link {
-    color: white;
 }
 
 .labels {
@@ -83,15 +74,6 @@ body {
     height: 20px;
     border: 1px solid gray;
     white-space: nowrap;
-}
-
-.list-group {
-    padding: 5px;
-    padding-left: 80px;
-}
-
-.list-group-item {
-    padding-right: 0px;
 }
 
 .icon-google {
@@ -109,10 +91,30 @@ body {
     transform: scale(.8, .8);
     margin-top: -5px;
 }
+/*list view*/
+
+#map-list {
+    height: 100%;
+    overflow-y: scroll;
+    width: 300px;
+}
+
+.navmenu-default {
+    background-color: rgba(0, 0, 0, 0.5)!important;
+}
+
+.list-group {
+    padding-top:80px;
+}
+
+.list-group-item {
+    padding-right: 0px;
+}
 
 .glyphicon {
     padding-right: 5px;
- }
+}
+
 .google-mini-icon {
     color: firebrick;
 }

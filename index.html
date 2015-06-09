@@ -7,76 +7,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-multiselect.css">
+    <link rel="stylesheet" href="css/jasny-bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
-
+    <script src="js/offline.min.js"></script>
 </head>
 
 <body>
-    <div class="navbar navbar-custom navbar-fixed-top">
-        <!--title-->
-        <div class="navbar-header">
-            <a class="navbar-brand">Rob's Neighborhood</a>
-            <!--toggle box-->
-            <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
+    <div>
+        <!--list panel-->
+        <div class="navmenu navmenu-default navmenu-fixed-left offcanvas-sm navmenu-custom">
+            <div class="panel list-group">
+                <a href="#" class="list-group-item" data-toggle="collapse" data-target="#sm" data-parent="#menu">GOOGLE<span class="icon-google pull-right"></span></a></a>
+                <div id="sm" class="sublinks collapse" data-bind="foreach: { data: googleResults, as: 'result' }">
+                    <a class="list-group-item small" data-bind="click: function (result) { highlightPin(result) }">
+                        <span class="glyphicon glyphicon-map-marker google-mini-icon"></span>
+                        <span data-bind="text: result.name"></span>
+                        <span data-bind="text: result.loc"></span>
+                    </a>
+                </div>
+                <a href="#" class="list-group-item" data-toggle="collapse" data-target="#sl" data-parent="#menu">FOURSQUARE<span class="icon-foursquare pull-right"></a>
+                <div id="sl" class="sublinks collapse" data-bind="foreach: { data: foursquareResults, as: 'result' }">
+                    <a class="list-group-item small" data-bind="click: function (result) { highlightPin(result) }">
+                        <span class="glyphicon glyphicon-map-marker foursquare-mini-icon"></span>
+                        <span data-bind="text: result.name"></span>
+                        <span data-bind="text: result.loc"></span>
+                    </a>
+                </div>
+            </div>
         </div>
 
-        <!--search field-->
-        <div class="navbar-collapse collapse">
+        <div class="navbar navbar-default navbar-fixed-top hidden-md hidden-lg navbar-custom">
+
+            <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navmenu">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!--search field-->
             <form role="form-group" data-bind="submit: doSearch" style="display:inline;">
                 <div class="input-group input-custom">
                     <input type="text" class="form-control" placeholder="Search for..." data-bind="value: searchTerm">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span> </span>
-                    <!--<button class="btn btn-default" type="button" data-bind="click: doSearch">Go!</button>-->
                     </span>
                 </div>
             </form>
-        </div>
 
-    </div>
 
-    <!--google map-->
-    <div id="map-canvas"></div>
-
-    <!--list results-->
-    <div id="map-list">
-        <div class="panel list-group">
-            <a href="#" class="list-group-item" data-toggle="collapse" data-target="#sm" data-parent="#menu">GOOGLE<span class="icon-google pull-right"></span></a></a>
-            <div id="sm" class="sublinks collapse" data-bind="foreach: { data: googleResults, as: 'result' }">
-                <a class="list-group-item small"><span class="glyphicon glyphicon-map-marker google-mini-icon" ></span><span data-bind="text: result.name"></span></a>
-            </div>
-            <a href="#" class="list-group-item" data-toggle="collapse" data-target="#sl" data-parent="#menu">FOURSQUARE<span class="icon-foursquare pull-right"></a>
-            <div id="sl" class="sublinks collapse" data-bind="foreach: { data: foursquareResults, as: 'result' }">
-                <a class="list-group-item small"><span class="glyphicon glyphicon-map-marker foursquare-mini-icon" ></span><span data-bind="text: result.name"></span></a>
-            </div>
-        </div>
-    </div>
-
-    <div class="footer">
-        <div class="dropup dropup-custom">
-            <select id="categories-google" multiple="multiple" data-bind="
+            <div class="dropdown">
+                <select id="categories-google" multiple="multiple" data-bind="
             options: categories(),          
             optionsText: 'name',           
             optionsValue: 'type',
             selectedOptions: searchCategories"></select>
-            <select id="categories-SQ" data-bind="
+                <select id="categories-SQ" data-bind="
             options: foursquareCategories(),          
             optionsText: 'name',           
             optionsValue: 'type',
             selectedOptions: foursquareSearchCategories"></select>
+            </div>
+
         </div>
+
+
+        <!--google map-->
+        <div id="map-canvas"></div>
     </div>
 
-    <script src="js/knockout-3.3.0.js"></script>
     <script src="js/jquery-2.1.3.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/bootstrap-multiselect.js"></script>
+    <script src="js/knockout-3.3.0.js"></script>
+    <script src="js/bootstrap-multiselect.min.js"></script>
+    <script src="js/jasny-bootstrap.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
     <script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerwithlabel/src/markerwithlabel.js"></script>
-    <script src="js/places.js"></script>
+    <script src="js/places.min.js"></script>
     <script src="js/app.js"></script>
 </body>
 

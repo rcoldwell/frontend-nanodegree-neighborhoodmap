@@ -115,7 +115,7 @@ function deleteMarkers() {
         mapViewModel.markers[i].setMap(null);
     }
     mapViewModel.clearMarkers();
-};
+}
 
 function createMarker(place) {
     var marker = new MarkerWithLabel({
@@ -123,7 +123,7 @@ function createMarker(place) {
         position: place.geometry.location
     });
 
-    var content = '<strong>' + place.name + '</strong><br>' + place.vicinity;
+    var content = "<strong>" + place.name + "</strong><br>" + place.vicinity;
 
     google.maps.event.addListener(marker, 'click', function () {
         infowindow.setContent(content);
@@ -135,21 +135,23 @@ function createMarker(place) {
     //listview
     var result = {
         name: place.name,
-        loc: place.vicinity
+        loc: place.vicinity,
+        position: place.geometry.location
     };
     mapViewModel.addGoogleResult(result);
 }
 
 function createSQMarker(place) {
+    var position = new google.maps.LatLng(place.venue.location.lat, place.venue.location.lng);
     var marker = new MarkerWithLabel({
         map: map,
-        position: new google.maps.LatLng(place.venue.location.lat, place.venue.location.lng),
+        position: position,
         icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
     });
 
     var address = place.venue.location.formattedAddress[0] + "<br>" + place.venue.location.formattedAddress[1];
-    var website = (place.venue.url != null) ? "<br><br><a href='" + place.venue.url + "' target='_blank'>" + place.venue.url + "</a>" : "";
-    var phone = (place.venue.contact.formattedPhone != null) ? "<br>" + place.venue.contact.formattedPhone : "";
+    var website = (place.venue.url !== null) ? "<br><br><a href='" + place.venue.url + "' target='_blank'>" + place.venue.url + "</a>" : "";
+    var phone = (place.venue.contact.formattedPhone !== null) ? "<br>" + place.venue.contact.formattedPhone : "";
     var menu = (place.venue.hasMenu) ? "<br><a href='" + place.venue.menu.url + "' target='_blank'>" + place.venue.menu.label + "</a>" : "";
     var content = "<strong>" + place.venue.name + "</strong><br>" + address + website + phone + menu;
 
@@ -163,7 +165,8 @@ function createSQMarker(place) {
     //listview
     var result = {
         name: place.venue.name,
-        loc: address
+        loc: address,
+        position: position
     };
     mapViewModel.addFoursquareResult(result);
 
@@ -197,13 +200,13 @@ function buildCategoryList() {
         includeSelectAllOption: true,
         buttonClass: 'btn btn-link',
         buttonText: function (options, select) {
-            return 'Google categories...';
+            return 'Google...';
         },
         maxHeight: Math.floor($('#map-canvas').height() / 2),
         onChange: function (option, checked, select) {
             mapViewModel.doSearch();
         },
-        nonSelectedText: "Google categories..."
+        nonSelectedText: "Google..."
     });
 }
 
@@ -211,13 +214,13 @@ function buildfoursquareCategoryList() {
     $('#categories-SQ').multiselect({
         buttonClass: 'btn btn-link',
         buttonText: function (options, select) {
-            return 'Foursquare categories...';
+            return 'Foursquare...';
         },
         maxHeight: Math.floor($('#map-canvas').height() / 2),
         onChange: function (option, checked, select) {
             mapViewModel.doSearch();
         },
-        nonSelectedText: "Foursquare categories..."
+        nonSelectedText: "Foursquare..."
     });
 }
 
@@ -226,6 +229,8 @@ $(document).ready(function () {
     buildCategoryList();
     buildfoursquareCategoryList();
     buildMap();
-
-
 });
+
+function highlightPin(data) {
+    map.setCenter(data.position);
+}
