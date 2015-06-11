@@ -11,57 +11,22 @@ body {
 
 .navbar-toggle {
     float: left;
-    margin-top: 10px;
-    margin-left: 10px;
-    margin-right: 0px;
-}
-
-.navbar-custom .form-control:focus {
-    border-color: #fefefe;
-    outline: 0;
-    -webkit-box-shadow: inset 0 0 0;
-    box-shadow: inset 0 0 0;
+    margin: 10px 0px 0px 10px;
 }
 
 .input-custom {
     padding: 10px 10px 0px 10px;
 }
-
-.btn-link {
-    color: #ebebeb;
-}
-
-.btn-link:focus,
-.btn-link:hover {
-    color: #ebebeb;
-}
-
-@media (min-width: 1200px) {
-    .hidden-lg {
-        display: block!important;
-    }
-}
-
-@media (max-width: 1199px) and (min-width: 992px) {
-    .hidden-md {
-        display: block!important;
-    }
-}
-
-@media (max-width: 991px) {
-    .navbar-toggle {
-        display: block;
-    }
-}
 /*map*/
 
 #map-canvas {
-    width: 100%;
+    width: calc(100% - 200);
     height: calc(100% - 0);
     position: absolute;
-    right: 0;
+    right: 0px;
     top: 48px;
-    bottom: 0;
+    bottom: 0px;
+    left: 200px;
 }
 
 .labels {
@@ -86,28 +51,35 @@ body {
 }
 /*list view*/
 
-#map-list {
-    height: 100%;
-    overflow-y: scroll;
-    width: 250px;
+.navmenu {
+    background-color: black!important;
+    width: 200px;
+    top:50px;
 }
 
-.navmenu-default {
-    background-color: rgba(0, 0, 0, 0.75)!important;
+.wordmark {
+    width: 150px;
+    height: auto;
+    top: 0px;
 }
 
 .list-group {
-    padding-top: 58px;
+    margin-top: 4px;
 }
 
 .list-group-item,
 .list-group-item:last-child {
     padding-top: 5px;
-    height: 50px;
+    padding-left: 20px;
+    height: 40px;
     background-color: transparent!important;
     border: none;
     border-radius: 0px;
     border-bottom: 2px solid rgba(235, 235, 235, 0.5);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow:ellipsis;
+    margin-bottom: 0px;
 }
 
 a.list-group-item,
@@ -120,16 +92,48 @@ a.list-group-item:focus {
     padding-right: 5px;
 }
 
-.wordmark {
-    width: 250px;
-    height: auto;
-    top: 0px;
-}
-
 .foursquare-mini-icon {
     color: dodgerblue;
+    padding-top: 8px;
+}
+
+.resultname {
+    padding-top: 8px;
 }
 
 .small {
     cursor: pointer;
+}
+/*responsive*/
+/*greater than 1200*/
+
+@media (min-width: 1200px) {}
+/*between 992 and 1199*/
+
+@media (max-width: 1199px) and (min-width: 992px) {}
+/*less than 991*/
+
+@media (max-width: 991px) {
+    .navbar-toggle {
+        display: none;
+    }
+    .offcanvas-xs {
+        display: block;
+    }
+}
+/*less than 414*/
+
+@media (max-width: 414px) {
+    .navbar-toggle {
+        display: block;
+    }
+    #map-canvas {
+        left: 0px;
+    }
+    .offcanvas-xs {
+        display: none;
+    }
+    .navmenu {
+        background-color: rgba(0, 0, 0, 0.75)!important;
+    }
 }

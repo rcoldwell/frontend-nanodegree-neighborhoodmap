@@ -1,24 +1,29 @@
 var map, infowindow, service;
+var zoom = 13;
 var SQid = "Y55TSVC1TXZIPPF235A52J5FW5TOE4UWCYQBV0AGLLJ13AIQ";
 var SQsecret = "V3OJZGHJ3P3FPZI1RMIPJUZPTZU413WEGOYLKIIG2E4ZKRKT";
 
 var mapViewModel = {
     mapLat: ko.observable("32.9889692"),
     mapLng: ko.observable("-96.5990308"),
-    foursquareResults: ko.observableArray([]),
-    addFoursquareResult: function (value) {
-        this.foursquareResults.push(value);
+    results: ko.observableArray([]),
+    addResult: function (value) {
+        this.results.push(value);
+    },
+    clearResults: function () {
+        this.results.removeAll();
     },
     markers: ko.observableArray([]),
     addMarker: function (value) {
         this.markers.push(value);
     },
     clearMarkers: function () {
-        this.markers = [];
+        this.markers.removeAll();
     },
     searchTerm: ko.observable(""),
     doSearch: function () {
-        SQsearch(this.mapLat(), this.mapLng(), this.searchTerm());
+        reset();
+        search(this.mapLat(), this.mapLng(), this.searchTerm());
         var latlng = new google.maps.LatLng(mapViewModel.mapLat(), mapViewModel.mapLng());
         map.setCenter(latlng);
     }
@@ -26,6 +31,12 @@ var mapViewModel = {
 
 function highlightPin(data) {
     map.setCenter(data.position);
+    map.setZoom(zoom);
+    data.marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function () {
+        data.marker.setAnimation(null);
+    }, 750);
+    //console.log(data);
 }
 
 function buildMap() {
@@ -33,7 +44,7 @@ function buildMap() {
 
     var mapOptions = {
         center: latlng,
-        zoom: 13
+        zoom: zoom
     };
 
     map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
@@ -41,21 +52,23 @@ function buildMap() {
     service = new google.maps.places.PlacesService(map);
 }
 
-function updateSQMarkers(results) {
-    var items = results.response.groups[0].items;
-    for (var i = 0; i < items.length; i++) {
-        createSQMarker(items[i]);
-    }
-}
-
-function deleteMarkers() {
-    for (var i = 0; i < mapViewModel.markers.length; i++) {
-        mapViewModel.markers[i].setMap(null);
+function reset() {
+    for (var i = 0; i < mapViewModel.markers().length; i++) {
+        mapViewModel.markers()[i].setMap(null);
     }
     mapViewModel.clearMarkers();
+    mapViewModel.clearResults();
 }
 
-function createSQMarker(place) {
+function createMarkers(results) {
+    var items = results.response.groups[0].items;
+    for (var i = 0; i < items.length; i++) {
+        createMarker(items[i]);
+    }
+}
+
+function createMarker(place) {
+    //map view
     var position = new google.maps.LatLng(place.venue.location.lat, place.venue.location.lng);
     var marker = new MarkerWithLabel({
         map: map,
@@ -64,10 +77,22 @@ function createSQMarker(place) {
     });
 
     var address = place.venue.location.formattedAddress[0] + "<br>" + place.venue.location.formattedAddress[1];
-    var website = (place.venue.url !== null) ? "<br><br><a href='" + place.venue.url + "' target='_blank'>" + place.venue.url + "</a>" : "";
-    var phone = (place.venue.contact.formattedPhone !== null) ? "<br>" + place.venue.contact.formattedPhone : "";
+    var website = (place.venue.url != null) ? "<br><br><a href='" + place.venue.url + "' target='_blank'>" + place.venue.url + "</a>" : "";
+    var phone = (place.venue.contact.formattedPhone != null) ? "<br>" + place.venue.contact.formattedPhone : "";
     var menu = (place.venue.hasMenu) ? "<br><a href='" + place.venue.menu.url + "' target='_blank'>" + place.venue.menu.label + "</a>" : "";
-    var content = "<strong>" + place.venue.name + "</strong><br>" + address + website + phone + menu;
+    var tipsdata = place.tips;
+    var tips = "";
+    if (tipsdata != null) {
+        for (var i = 0; i < tipsdata.length; i++) {
+            var text = tipsdata[i].text;
+            var url = tipsdata[i].canonicalUrl;
+            var name = tipsdata[i].user.firstName;
+            if (text != null) {
+                tips = '<br><br><a href="' + url + '" target="_blank">' + text + '</a> - ' + name;
+            }
+        }
+    }
+    var content = "<strong>" + place.venue.name + "</strong><br>" + address + website + phone + menu + tips;
 
     google.maps.event.addListener(marker, 'click', function () {
         infowindow.setContent(content);
@@ -79,19 +104,19 @@ function createSQMarker(place) {
     //listview
     var result = {
         name: place.venue.name,
-        loc: address,
+        marker: marker,
         position: position
     };
-    mapViewModel.addFoursquareResult(result);
-
+    mapViewModel.addResult(result);
 }
 
-function SQsearch(lat, lng, term) {
+function search(lat, lng, term) {
     if (term) {
+        var date = moment().format('YYYYMMDD');
         var url = "https://api.foursquare.com/v2/venues/explore" +
             "?client_id=" + SQid +
             "&client_secret=" + SQsecret +
-            "&v=20150504" +
+            "&v=" + date +
             "&radius=5000" +
             "&ll=" + lat + "," + lng +
             "&query=" + term;
@@ -99,10 +124,11 @@ function SQsearch(lat, lng, term) {
         $.ajax({
             url: url,
             success: function (result) {
-                updateSQMarkers(result);
+                createMarkers(result);
+                //console.log(mapViewModel.markers());
             },
             error: function () {
-                alert("Foursquare failed.");
+                alert("Foursquare request failed. Please try again.");
             }
         });
     }

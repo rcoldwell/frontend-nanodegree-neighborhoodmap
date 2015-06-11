@@ -9,7 +9,7 @@ http://www.bootply.com/render/129821?#
 http://jsfiddle.net/Cqp7w/
 http://www.bootply.com/tGF9MEGbLM
 http://getbootstrap.com/components/
-Simple Sidebar HTML Template (http://startbootstrap.com)
+http://jasny.github.io/bootstrap/
  
 JS plugins
 http://davidstutz.github.io/bootstrap-multiselect/
