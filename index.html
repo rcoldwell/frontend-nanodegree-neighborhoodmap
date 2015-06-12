@@ -15,14 +15,7 @@
     <link rel="stylesheet" href="css/offline-language-english.css">
     <link rel="stylesheet" href="css/offline-theme-default.css">
     <script>
-        Offline.options = {
-            checks: {
-                image: {
-                    url: 'favicon.ico'
-                },
-                active: 'image'
-            }
-        }
+        Offline.options = {checks: {xhr: {url: '/frontend-nanodegree-neighborhoodmap'}}};
         var run = function () {
             if (Offline.state === 'up')
                 Offline.check();
