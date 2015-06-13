@@ -7,8 +7,10 @@ body {
 body {
     padding-top: 50px;
 }
-/*header*/
 
+/**
+ * header bar
+ */
 .navbar-toggle {
     float: left;
     margin: 10px 0px 0px 10px;
@@ -21,8 +23,10 @@ body {
 .textentry {
     display: inline;
 }
-/*map*/
 
+/**
+ * Google map
+ */
 #map-canvas {
     width: calc(100% - 200);
     height: calc(100% - 0);
@@ -53,8 +57,10 @@ body {
     transform: scale(.8, .8);
     margin-top: -5px;
 }
-/*list view*/
 
+/**
+ * results list
+ */
 .navmenu {
     background-color: black!important;
     width: 200px;
@@ -108,15 +114,12 @@ a.list-group-item:focus {
 .small {
     cursor: pointer;
 }
-/*responsive*/
-/*greater than 1200*/
 
-@media (min-width: 1200px) {}
-/*between 992 and 1199*/
+/**
+ * responsive styles
+ */
 
-@media (max-width: 1199px) and (min-width: 992px) {}
-/*less than 991*/
-
+/*window width less than 991*/
 @media (max-width: 991px) {
     .navbar-toggle {
         display: none;
@@ -125,8 +128,8 @@ a.list-group-item:focus {
         display: block;
     }
 }
-/*less than 414*/
 
+/*window width less than 414*/
 @media (max-width: 414px) {
     .navbar-toggle {
         display: block;
