@@ -75,26 +75,27 @@ function createMarker(place) {
     var marker = new MarkerWithLabel({
         map: map,
         position: position,
-        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+        icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
     });
 
-    var address = place.venue.location.formattedAddress[0] + "<br>" + place.venue.location.formattedAddress[1];
-    var website = (place.venue.url != null) ? "<br><br><a href='" + place.venue.url + "' target='_blank'>" + place.venue.url + "</a>" : "";
-    var phone = (place.venue.contact.formattedPhone != null) ? "<br>" + place.venue.contact.formattedPhone : "";
-    var menu = (place.venue.hasMenu) ? "<br><a href='" + place.venue.menu.url + "' target='_blank'>" + place.venue.menu.label + "</a>" : "";
+    var address = place.venue.location.formattedAddress[0] + "<br>" + place.venue.location.formattedAddress[1] + "<br>";
+    var phone = (place.venue.contact.formattedPhone) ? place.venue.contact.formattedPhone + "<br>" : "";
+    var menu = (place.venue.hasMenu) ? "<br><strong><a href=\"" + place.venue.menu.url + "\" target=\"_blank\">" + place.venue.menu.label + "</a></strong>" : "";
+    var website = (place.venue.url) ? "<br><a href=\"" + place.venue.url + "\" target=\"_blank\">" + place.venue.url + "</a>" : "";
     var tipsdata = place.tips;
     var tips = "";
-    if (tipsdata != null) {
+    if (tipsdata) {
+        tips = "<br><br><strong>Tips:</strong><br>";
         for (var i = 0; i < tipsdata.length; i++) {
             var text = tipsdata[i].text;
             var url = tipsdata[i].canonicalUrl;
             var name = tipsdata[i].user.firstName;
-            if (text != null) {
-                tips = '<br><br><a href="' + url + '" target="_blank">' + text + '</a> - ' + name;
+            if (text) {
+                tips += "<a href=\"" + url + "\" target=\"_blank\">" + text + "</a> - " + name + "<br>";
             }
         }
     }
-    var content = "<strong>" + place.venue.name + "</strong><br>" + address + website + phone + menu + tips;
+    var content = "<strong>" + place.venue.name + "</strong><br>" + address + phone + menu + website + tips;
 
     google.maps.event.addListener(marker, 'click', function () {
         infowindow.setContent(content);
@@ -115,7 +116,7 @@ function createMarker(place) {
 
 function search(lat, lng, term) {
     if (term) {
-        var date = moment().format('YYYYMMDD');
+        var date = moment().format("YYYYMMDD");
         var url = "https://api.foursquare.com/v2/venues/explore" +
             "?client_id=" + SQid +
             "&client_secret=" + SQsecret +

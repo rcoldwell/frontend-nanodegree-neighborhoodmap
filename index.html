@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <title>Rob's Neighborhood</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -18,12 +18,12 @@
         Offline.options = {
             checks: {
                 xhr: {
-                    url: '/frontend-nanodegree-neighborhoodmap'
+                    url: "/frontend-nanodegree-neighborhoodmap"
                 }
             }
         };
         var run = function () {
-            if (Offline.state === 'up')
+            if (Offline.state === "up")
                 Offline.check();
         }
         setInterval(run, 5000);
@@ -36,7 +36,7 @@
         <div class="list-group">
             <!--logo-->
             <div class="list-group-item">
-                <img class="wordmark" src="img/foursquare-wordmark.png" alt="FOURSQUARE">
+                <img class="wordmark" src="img/foursquare-wordmark.png" alt="Foursquare">
             </div>
             <!--bound list-->
             <div class="" data-bind="foreach: { data: results, as: 'result' }">
@@ -62,8 +62,7 @@
         <form class="textentry" role="search" data-bind="submit: doSearch">
             <div class="input-group input-custom">
                 <input type="text" class="form-control" placeholder="Search for..." data-bind="value: searchTerm">
-                <span class="input-group-addon"></span><span class="glyphicon glyphicon-search"></span>
-
+                <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
             </div>
         </form>
 
