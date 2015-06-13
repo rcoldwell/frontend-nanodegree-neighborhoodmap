@@ -30,12 +30,14 @@ var mapViewModel = {
 };
 
 function highlightPin(data) {
-    map.setCenter(data.position);
+    map.panTo(data.position);
     map.setZoom(zoom);
     data.marker.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout(function () {
         data.marker.setAnimation(null);
     }, 750);
+    infowindow.setContent(data.content);
+    infowindow.open(map, data.marker);
     //console.log(data);
 }
 
@@ -105,6 +107,7 @@ function createMarker(place) {
     var result = {
         name: place.venue.name,
         marker: marker,
+        content: content,
         position: position
     };
     mapViewModel.addResult(result);
