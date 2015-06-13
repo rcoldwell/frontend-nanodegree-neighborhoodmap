@@ -24,6 +24,18 @@ body {
     display: inline;
 }
 
+a.searchicon{
+    color:black;
+    cursor: pointer;
+    padding-left: 5px;
+}
+
+a.searchicon:hover,
+a.searchicon:focus {
+    color: dodgerblue;
+    text-decoration:none;
+}
+
 /**
  * Google map
  */

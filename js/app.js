@@ -110,8 +110,8 @@ function createMarker(place) {
     var name = "<strong>" + place.venue.name + "</strong><br>";
     var address = place.venue.location.formattedAddress[0] + "<br>" + place.venue.location.formattedAddress[1] + "<br>";
     var phone = (place.venue.contact.formattedPhone) ? place.venue.contact.formattedPhone + "<br>" : "";
-    var menu = (place.venue.hasMenu) ? "<br><strong><a href=\"" + place.venue.menu.url + "\" target=\"_blank\">" + place.venue.menu.label + "</a></strong>" : "";
-    var website = (place.venue.url) ? "<br><a href=\"" + place.venue.url + "\" target=\"_blank\">" + place.venue.url + "</a>" : "";
+    var menu = (place.venue.hasMenu) ? "<br><strong><a href=\"" + place.venue.menu.url + "\" target=\"_blank\">" + place.venue.menu.label + "</a></strong><br>" : "";
+    var website = (place.venue.url) ? "<br><strong>Website:</strong><br><a href=\"" + place.venue.url + "\" target=\"_blank\">" + place.venue.url + "</a>" : "";
     var tipsdata = place.tips;
     var tips = "";
     if (tipsdata) {
@@ -119,9 +119,9 @@ function createMarker(place) {
         for (var i = 0; i < tipsdata.length; i++) {
             var text = tipsdata[i].text;
             var url = tipsdata[i].canonicalUrl;
-            var name = tipsdata[i].user.firstName;
+            var firstName = tipsdata[i].user.firstName;
             if (text) {
-                tips += "<a href=\"" + url + "\" target=\"_blank\">" + text + "</a> - " + name + "<br>";
+                tips += "<a href=\"" + url + "\" target=\"_blank\">" + text + "</a> - " + firstName + "<br>";
             }
         }
     }
